@@ -3,7 +3,9 @@
 *.iml
 
 # Build artefacts
+.gradle/
 target/
+build/
 
 # Log file
 *.log
