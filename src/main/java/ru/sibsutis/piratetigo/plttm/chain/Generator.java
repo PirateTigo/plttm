@@ -19,9 +19,8 @@ public class Generator {
     private final Integer minLength;
     private final Integer maxLength;
     private final HashSet<Character> terminals;
-    private final HashSet<Character> nonTerminals;
 
-    private final Set<String> chains = new HashSet<>();
+    private final List<String> chains = new LinkedList<>();
     private final LinkedList<Character> nonTerminalsUniquePath = new LinkedList<>();
 
     public Generator(
@@ -30,8 +29,7 @@ public class Generator {
             InferenceType direction,
             Integer minLength,
             Integer maxLength,
-            HashSet<Character> terminals,
-            HashSet<Character> nonTerminals
+            HashSet<Character> terminals
     ) {
         this.rules = rules;
         this.goal = goal;
@@ -39,7 +37,6 @@ public class Generator {
         this.minLength = minLength;
         this.maxLength = maxLength;
         this.terminals = terminals;
-        this.nonTerminals = nonTerminals;
     }
 
     /**
@@ -98,8 +95,7 @@ public class Generator {
      * Перед получением необходимо вызвать метод {@link #generate()}.
      */
     public List<String> getChains() {
-        String[] chainsArray = new String[chains.size()];
-        return Arrays.asList(chains.toArray(chainsArray));
+        return chains;
     }
 
     private String generateChainLeft(String rule, String chain, String rest) {
@@ -117,7 +113,7 @@ public class Generator {
                     nonTerminalsUniquePath.push(lastNonTerminal);
                 }
                 return fullChain;
-            } else if (nonTerminals.contains(handledCharacter)) {
+            } else {
                 nonTerminalsUniquePath.push(handledCharacter);
                 long deep = nonTerminalsUniquePath.stream()
                         .filter(handledCharacter::equals).count() - 1;
@@ -134,11 +130,22 @@ public class Generator {
                 List<String> newRules = rules.get(handledCharacter);
                 for (String newRule : newRules) {
                     try {
-                        add(generateChainLeft(
-                                newRule,
-                                chain,
-                                ruleRest + rest
-                        ));
+                        if (newRule.equals(LAMBDA.toString())) {
+                            Character lastNonTerminal =
+                                    nonTerminalsUniquePath.peek();
+                            String fullChain =
+                                    generateChainLeft("", chain, ruleRest + rest);
+                            if ((ruleRest + rest).length() > 0) {
+                                nonTerminalsUniquePath.push(lastNonTerminal);
+                            }
+                            add(fullChain);
+                        } else {
+                            add(generateChainLeft(
+                                    newRule,
+                                    chain,
+                                    ruleRest + rest
+                            ));
+                        }
                     } catch(MissRuleException ex) {
                         LOGGER.info(ex.getMessage()
                                 + ". Переходим к следующему правилу");
@@ -163,9 +170,6 @@ public class Generator {
                 }
                 nonTerminalsUniquePath.pop();
                 return "";
-            } else {
-                // Пустое правило
-                return rest.length() > 0 ? generateRestChainLeft(rest, chain) : chain;
             }
         } else {
             return rest.length() > 0 ? generateRestChainLeft(rest, chain) : chain;
@@ -187,7 +191,7 @@ public class Generator {
                     nonTerminalsUniquePath.push(lastNonTerminal);
                 }
                 return fullChain;
-            } else if (nonTerminals.contains(handledCharacter)) {
+            } else {
                 nonTerminalsUniquePath.push(handledCharacter);
                 long deep = nonTerminalsUniquePath.stream()
                         .filter(handledCharacter::equals).count() - 1;
@@ -204,11 +208,22 @@ public class Generator {
                 List<String> newRules = rules.get(handledCharacter);
                 for (String newRule : newRules) {
                     try {
-                        add(generateChainRight(
-                                newRule,
-                                chain,
-                                rest + ruleRest
-                        ));
+                        if (newRule.equals(LAMBDA.toString())) {
+                            Character lastNonTerminal =
+                                    nonTerminalsUniquePath.peek();
+                            String fullChain =
+                                    generateChainRight("", chain, rest + ruleRest);
+                            if ((ruleRest + rest).length() > 0) {
+                                nonTerminalsUniquePath.push(lastNonTerminal);
+                            }
+                            add(fullChain);
+                        } else {
+                            add(generateChainRight(
+                                    newRule,
+                                    chain,
+                                    rest + ruleRest
+                            ));
+                        }
                     } catch (MissRuleException ex) {
                         LOGGER.info(ex.getMessage()
                                 + ". Переходим к следующему правилу");
@@ -233,9 +248,6 @@ public class Generator {
                 }
                 nonTerminalsUniquePath.pop();
                 return "";
-            } else {
-                // Пустое правило
-                return rest.length() > 0 ? generateRestChainRight(rest, chain) : chain;
             }
         } else {
             return rest.length() > 0 ? generateRestChainRight(rest, chain) : chain;
@@ -245,7 +257,9 @@ public class Generator {
     private void add(String chain) {
         if (chain.length() >= minLength) {
             if (chain.length() <= maxLength) {
-                chains.add(chain);
+                if (!chains.contains(chain)) {
+                    chains.add(chain);
+                }
             } else {
                 throw new ChainLengthExceededException(
                         String.format(

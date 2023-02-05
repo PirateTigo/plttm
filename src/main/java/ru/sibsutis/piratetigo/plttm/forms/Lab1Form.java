@@ -245,8 +245,7 @@ public class Lab1Form {
                             type,
                             chainSizeFrom.getValue(),
                             chainSizeTo.getValue(),
-                            terminals,
-                            nonTerminals
+                            terminals
                     );
                     generator.generate();
                     chains = generator.getChains();
