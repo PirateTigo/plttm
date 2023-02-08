@@ -7,13 +7,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import lombok.extern.java.Log;
-import ru.sibsutis.piratetigo.plttm.chain.Generator;
+import ru.sibsutis.piratetigo.plttm.chain.generator.Generator;
 import ru.sibsutis.piratetigo.plttm.common.InferenceType;
 
-import static ru.sibsutis.piratetigo.plttm.chain.Generator.LAMBDA;
+import static ru.sibsutis.piratetigo.plttm.common.Tools.*;
 
 /**
  * Контроллер формы вкладки "Лабораторная работа №1".
@@ -275,39 +274,6 @@ public class Lab1Form {
         });
 
         rules.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    }
-
-    private boolean isUnique(String value, HashSet<Character> alphabet) {
-        char[] characters = value.toCharArray();
-        for (Character character: characters) {
-            if (!alphabet.add(character)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private HashSet<Character> calculateAlphabet(
-            String newValue,
-            HashSet<Character> oldAlphabet,
-            TextArea textArea,
-            HashSet<Character> excluded) {
-        HashSet<Character> alphabet = new HashSet<>();
-        if (isUnique(newValue, alphabet) && !areIntersected(alphabet, excluded)) {
-            return alphabet;
-        }
-        textArea.textProperty().set(
-                oldAlphabet.stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining())
-        );
-        return oldAlphabet;
-    }
-
-    private boolean areIntersected(Set<Character> left, Set<Character> right) {
-        HashSet<Character> intersection = new HashSet<>(left);
-        intersection.retainAll(right);
-        return intersection.size() != 0;
     }
 
     private void toggleAddRuleButton() {

@@ -1,17 +1,17 @@
-package ru.sibsutis.piratetigo.plttm.chain;
+package ru.sibsutis.piratetigo.plttm.chain.generator;
 
 import lombok.extern.java.Log;
 import ru.sibsutis.piratetigo.plttm.common.InferenceType;
 
 import java.util.*;
 
+import static ru.sibsutis.piratetigo.plttm.common.Tools.LAMBDA;
+
 /**
  * Генератор цепочек символов на основе КС-грамматики.
  */
 @Log
 public class Generator {
-
-    public final static Character LAMBDA = 'λ';
 
     private final HashMap<Character, List<String>> rules;
     private final Character goal;

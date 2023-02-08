@@ -1,4 +1,4 @@
-package ru.sibsutis.piratetigo.plttm.chain;
+package ru.sibsutis.piratetigo.plttm.chain.generator;
 
 /**
  * Выбрасывается при обнаружении зацикливания при генерации цепочек.

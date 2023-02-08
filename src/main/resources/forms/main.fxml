@@ -14,7 +14,7 @@
                 <fx:include source="lab1.fxml"/>
             </Tab>
             <Tab fx:id="lab2" text="Лабораторная работа №2">
-
+                <fx:include source="lab2.fxml"/>
             </Tab>
             <Tab fx:id="lab3" text="Лабораторная работа №3">
 
