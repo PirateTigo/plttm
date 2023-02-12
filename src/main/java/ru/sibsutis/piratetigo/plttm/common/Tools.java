@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class Tools {
 
     public final static Character LAMBDA = 'λ';
+    public final static Character RULE = '┠';
 
     /**
      * Вычисляет множество уникальных символов (алфавит) на основе

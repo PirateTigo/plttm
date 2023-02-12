@@ -11,11 +11,11 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Детерминированный Конечный Автомат, распознающий цепочки языка.
+ * Детерминированный конечный автомат, распознающий цепочки языка.
  */
 @Log
 @RequiredArgsConstructor
-public class DSARecognizer {
+public class DFSMRecognizer {
 
     private final HashSet<String> states;
     private final HashSet<Character> alphabet;
@@ -52,10 +52,10 @@ public class DSARecognizer {
                 createError("В цепочке присутствуют посторонние символы.");
             }
         }
+        logState(true);
         if (!endStates.contains(currentState)) {
             createError("После прочтения цепочки ДКА не пришёл в конечное состояние.");
         }
-        logState(true);
         log("Процесс распознавания завершен");
     }
 
@@ -99,7 +99,7 @@ public class DSARecognizer {
                 StringBuilder::append
         ).toString();
         log(String.format(
-                "(%s, %s)" + (isFinal ? "" : " =>"),
+                "(%s, %s)" + (isFinal ? "" : " " + Tools.RULE),
                 currentState,
                 restChain.isEmpty() ? Tools.LAMBDA : restChain
         ));

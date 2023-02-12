@@ -11,7 +11,7 @@ import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.DefaultStringConverter;
 import lombok.extern.java.Log;
-import ru.sibsutis.piratetigo.plttm.chain.recognizer.DSARecognizer;
+import ru.sibsutis.piratetigo.plttm.chain.recognizer.DFSMRecognizer;
 import ru.sibsutis.piratetigo.plttm.chain.recognizer.RecognizeException;
 
 import java.util.*;
@@ -109,7 +109,7 @@ public class Lab2Form {
                         );
                     }
                     toggleTestButton();
-        });
+                });
 
         // Обработчик пользовательского ввода алфавита языка
         userAlphabet.textProperty().addListener(
@@ -132,7 +132,7 @@ public class Lab2Form {
                             generateTableData(states, alphabet)
                     );
                     toggleTestButton();
-        });
+                });
 
         // Обработчик автоматического изменения длины элемента управления начальным состоянием
         startState.widthProperty().addListener(
@@ -187,7 +187,7 @@ public class Lab2Form {
 
                 @Override
                 protected Void call() {
-                    DSARecognizer dsaRecognizer = new DSARecognizer(
+                    DFSMRecognizer dfsmRecognizer = new DFSMRecognizer(
                             states,
                             alphabet,
                             startState.getValue(),
@@ -197,7 +197,7 @@ public class Lab2Form {
                             process
                     );
                     try {
-                        dsaRecognizer.recognize();
+                        dfsmRecognizer.recognize();
                         resultMsg = "Цепочка принадлежит языку.";
                     } catch (RecognizeException e) {
                         resultMsg = "Цепочка не принадлежит языку.";

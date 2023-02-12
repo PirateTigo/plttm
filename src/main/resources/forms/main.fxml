@@ -11,13 +11,13 @@
           AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="20.0">
         <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE" tabMinWidth="180">
             <Tab fx:id="lab1" text="Лабораторная работа №1">
-                <fx:include source="lab1.fxml"/>
+                <fx:include source="lab1.fxml" />
             </Tab>
             <Tab fx:id="lab2" text="Лабораторная работа №2">
-                <fx:include source="lab2.fxml"/>
+                <fx:include source="lab2.fxml" />
             </Tab>
             <Tab fx:id="lab3" text="Лабораторная работа №3">
-
+                <fx:include source="lab3.fxml" />
             </Tab>
             <Tab fx:id="lab4" text="Лабораторная работа №4">
 
