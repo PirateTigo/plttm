@@ -10,10 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ru.sibsutis.piratetigo.plttm.forms.Lab1Form"
-            prefHeight="600.0" prefWidth="1200.0">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sibsutis.piratetigo.plttm.forms.Lab1Form">
    <Label layoutX="14.0" layoutY="14.0" style="-fx-font-weight: bold;" text="КС-грамматика" />
    <Label layoutX="14.0" layoutY="41.0" text="Терминальный алфавит:" />
    <TextArea fx:id="userTerminals" layoutX="165.0" layoutY="41.0" prefHeight="39.0" prefWidth="413.0" />
@@ -43,8 +40,9 @@
    </Label>
    <Label layoutX="14.0" layoutY="314.0" text="Тип вывода:" />
    <Button fx:id="inferenceType" layoutX="165.0" layoutY="310.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" text="Левосторонний" />
+   <Button fx:id="start" disable="true" layoutX="912.0" layoutY="47.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="106.0" text="Запустить" />
+   <Button fx:id="cancel" layoutX="1044.0" layoutY="47.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Отменить" />
    <Label layoutX="685.0" layoutY="70.0" text="Вывод:" />
-   <Button fx:id="start" disable="true" layoutX="1044.0" layoutY="46.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="106.0" text="Запустить" />
    <ListView fx:id="inference" layoutX="685.0" layoutY="93.0" prefHeight="257.0" prefWidth="466.0" />
    <Button fx:id="reset" layoutX="496.0" layoutY="303.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="84.0" text="Сброс" />
    <Label fx:id="chainCount" layoutX="685.0" layoutY="360.0" text="Всего цепочек: 0" />

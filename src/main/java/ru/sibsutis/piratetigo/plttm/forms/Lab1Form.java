@@ -11,6 +11,7 @@ import java.util.*;
 import lombok.extern.java.Log;
 import ru.sibsutis.piratetigo.plttm.chain.generator.Generator;
 import ru.sibsutis.piratetigo.plttm.common.InferenceType;
+import ru.sibsutis.piratetigo.plttm.grammar.ContextFreeGrammar;
 
 import static ru.sibsutis.piratetigo.plttm.common.Tools.*;
 
@@ -19,9 +20,6 @@ import static ru.sibsutis.piratetigo.plttm.common.Tools.*;
  */
 @Log
 public class Lab1Form {
-
-    private final static Character ARROW = '→';
-    private final static String COUNTER_DEFAULT = "Всего цепочек: 0";
 
     /** Введенные пользователем терминальные символы. */
     @FXML
@@ -33,11 +31,11 @@ public class Lab1Form {
 
     /** Целевой символ. */
     @FXML
-    ComboBox<Character> goalCharacter;
+    ComboBox<String> goalCharacter;
 
     /** Порождающий нетерминальный символ правила. */
     @FXML
-    ComboBox<Character> generatingSymbol;
+    ComboBox<String> generatingSymbol;
 
     /** Вводимое пользователем правило вывода КС-грамматики. */
     @FXML
@@ -75,6 +73,10 @@ public class Lab1Form {
     @FXML
     Button start;
 
+    /** Кнопка отмены процесса вывода. */
+    @FXML
+    Button cancel;
+
     /** Вывод цепочек. */
     @FXML
     ListView<String> inference;
@@ -87,28 +89,34 @@ public class Lab1Form {
     @FXML
     Button reset;
 
-    /** Вычисленное множество терминальных символов. */
-    private HashSet<Character> terminals = new HashSet<>();
+    /** Контекстно-свободная грамматика. */
+    private ContextFreeGrammar contextFreeGrammar;
 
-    /** Вычисленное множество нетерминальных символов. */
-    private HashSet<Character> nonTerminals = new HashSet<>();
+    /** Признак возможности добавления текущего введенного правила вывода в список. */
+    private boolean isCorrectRule = false;
+
+    /** Генератор цепочек. */
+    private Generator generator;
 
     @FXML
     private void initialize() {
+        contextFreeGrammar = new ContextFreeGrammar(
+                userTerminals,
+                userNonTerminals,
+                goalCharacter,
+                rules
+        );
+
         // Обработчик пользовательского ввода терминальных символов
         userTerminals.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue.trim().equals(oldValue)) {
                         userTerminals.setText(oldValue);
                     } else {
-                        terminals = calculateAlphabet(
-                                newValue.trim(),
-                                terminals,
-                                userTerminals,
-                                nonTerminals
-                        );
+                        contextFreeGrammar.setTerminals(newValue.trim());
                         rule.textProperty().set("");
                         rules.getItems().clear();
+                        contextFreeGrammar.getRules().clear();
                     }
                 }
         );
@@ -116,25 +124,33 @@ public class Lab1Form {
         // Обработчик пользовательского ввода нетерминальных символов
         userNonTerminals.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    if (newValue.trim().equals(oldValue)) {
+                    if (newValue.contains(LESS_THAN.toString())
+                        || newValue.contains(GREATER_THAN.toString())
+                        || newValue.trim().equals(oldValue)) {
                         userNonTerminals.setText(oldValue);
                     } else {
-                        nonTerminals = calculateAlphabet(
-                                newValue.trim(),
-                                nonTerminals,
-                                userNonTerminals,
-                                terminals
+                        contextFreeGrammar.setNonTerminals(newValue.trim());
+                        goalCharacter.getItems().setAll(
+                                contextFreeGrammar.getNonTerminals()
                         );
-                        goalCharacter.getItems().setAll(nonTerminals);
-                        generatingSymbol.getItems().setAll(nonTerminals);
+                        generatingSymbol.getItems().setAll(
+                                contextFreeGrammar.getNonTerminals()
+                        );
                         rule.textProperty().set("");
                         rules.getItems().clear();
+                        contextFreeGrammar.getRules().clear();
                     }
                 }
         );
 
         // Обработчик выбора целевого символа
-        goalCharacter.setOnAction(event ->toggleStartButton());
+        goalCharacter.valueProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    toggleStartButton();
+                    if (goalCharacter.getValue() != null) {
+                        contextFreeGrammar.setGoal(goalCharacter.getValue());
+                    }
+                });
 
         // Обработчик пользовательского ввода порождающего символа правила вывода
         generatingSymbol.setOnAction(event -> toggleAddRuleButton());
@@ -147,16 +163,35 @@ public class Lab1Form {
                     return;
                 }
             }
-            HashSet<Character> allSymbols = new HashSet<>();
-            allSymbols.addAll(terminals);
-            allSymbols.addAll(nonTerminals);
-            allSymbols.add(LAMBDA);
+            HashSet<String> allLexemes = new HashSet<>();
+            allLexemes.addAll(symbolsToStrings(
+                    contextFreeGrammar.getTerminals()
+            ));
+            allLexemes.addAll(
+                    contextFreeGrammar.getNonTerminals()
+            );
+            allLexemes.add(LAMBDA.toString());
             boolean isCorrectInput = true;
-            for (Character character: newValue.toCharArray()) {
-                if (!allSymbols.contains(character)) {
-                    isCorrectInput = false;
-                    break;
+            isCorrectRule = true;
+            try {
+                for (String lexeme : stringToLexemes(newValue)) {
+                    if (lexeme.charAt(0) == LESS_THAN) {
+                        if (!setContainsLexeme(
+                                lexeme,
+                                contextFreeGrammar.getNonTerminals(),
+                                true)) {
+                            isCorrectInput = false;
+                            break;
+                        }
+                        continue;
+                    }
+                    if (!setContainsLexeme(lexeme, allLexemes, false)) {
+                        isCorrectInput = false;
+                        break;
+                    }
                 }
+            } catch (IllegalArgumentException ex) {
+                isCorrectRule = false;
             }
             if (!isCorrectInput) {
                 rule.textProperty().set(oldValue);
@@ -169,12 +204,12 @@ public class Lab1Form {
 
         // Обработчик кнопки добавления нового правила в список правил вывода
         addRule.setOnAction(event -> {
-            String item = generatingSymbol.getValue() +
-                    ARROW.toString() +
-                    rule.getText();
+            String item =
+                    generatingSymbol.getValue() + ARROW + rule.getText();
             if (!rules.getItems().contains(item)) {
                 rules.getItems().add(item);
                 rule.setText("");
+                contextFreeGrammar.addRule(item);
             }
             rule.requestFocus();
         });
@@ -185,9 +220,13 @@ public class Lab1Form {
                         deleteRule.setDisable(false));
 
         // Обработчик кнопки удаления выбранного правила из списка правил вывода
-        deleteRule.setOnAction(event -> rules.getItems().removeAll(
-                rules.getSelectionModel().getSelectedItems()
-        ));
+        deleteRule.setOnAction(event -> {
+            rules.getItems().removeAll(
+                    rules.getSelectionModel().getSelectedItems()
+            );
+            contextFreeGrammar.getRules().clear();
+            rules.getItems().forEach(rule -> contextFreeGrammar.addRule(rule));
+        });
 
         // Обработчик изменения количества элементов в списке правил вывода
         rules.getItems().addListener((ListChangeListener<String>) c -> {
@@ -224,28 +263,27 @@ public class Lab1Form {
         start.setOnAction(event -> {
             setAllDisable(true);
 
-            HashMap<Character, List<String>> srcRules = new HashMap<>();
-            rules.getItems().forEach(item ->
-                    srcRules.computeIfAbsent(item.charAt(0), k -> new ArrayList<>())
-                            .add(item.substring(2)));
-            logGrammar(srcRules, goalCharacter.getValue());
+            contextFreeGrammar.log();
             InferenceType type = InferenceType.from(inferenceType.getText());
             inference.getItems().clear();
             chainCount.setText(COUNTER_DEFAULT);
+
+            generator = new Generator(
+                    contextFreeGrammar.getRules(),
+                    goalCharacter.getValue(),
+                    type,
+                    chainSizeFrom.getValue(),
+                    chainSizeTo.getValue(),
+                    symbolsToStrings(
+                            contextFreeGrammar.getTerminals()
+                    )
+            );
 
             Thread chainGenerationTask = new Thread(new Task<List<String>>() {
                 private List<String> chains = new ArrayList<>();
 
                 @Override
                 protected List<String> call() {
-                    Generator generator = new Generator(
-                            srcRules,
-                            goalCharacter.getValue(),
-                            type,
-                            chainSizeFrom.getValue(),
-                            chainSizeTo.getValue(),
-                            terminals
-                    );
                     generator.generate();
                     chains = generator.getChains();
                     return chains;
@@ -265,12 +303,20 @@ public class Lab1Form {
             chainGenerationTask.start();
         });
 
+        // Обработчик кнопки отмены генерации цепочек
+        cancel.setOnAction(event -> {
+            if (generator != null && generator.isRunning()) {
+                generator.cancel();
+            }
+        });
+
         // Обработчик кнопки сброса всех полей
         reset.setOnAction(event -> {
             userTerminals.textProperty().set("");
             userNonTerminals.textProperty().set("");
             inference.getItems().clear();
             chainCount.setText(COUNTER_DEFAULT);
+            userTerminals.requestFocus();
         });
 
         rules.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -278,34 +324,17 @@ public class Lab1Form {
 
     private void toggleAddRuleButton() {
         addRule.setDisable(
-                generatingSymbol.getValue() == null || rule.getText().equals("")
+                generatingSymbol.getValue() == null
+                        || rule.getText().equals("")
+                        || !isCorrectRule
         );
     }
 
     private void toggleStartButton() {
         start.setDisable(
-                rules.getItems().size() == 0 || goalCharacter.getValue() == null
+                rules.getItems().size() == 0
+                        || goalCharacter.getValue() == null
         );
-    }
-
-    private void logGrammar(HashMap<Character, List<String>> srcRules, Character goal) {
-        StringJoiner stringedRules = new StringJoiner(
-                ", ",
-                "Целевой символ: " + goal + "\nИсходные правила: [",
-                "]"
-        );
-        srcRules.forEach((left, right) -> {
-            StringJoiner oneRule = new StringJoiner(
-                    "|",
-                    left.toString() + "=>",
-                    ""
-            );
-            for (String rule: right) {
-                oneRule.add(rule.replace(LAMBDA.toString(), "<lambda>"));
-            }
-            stringedRules.add(oneRule.toString());
-        });
-        LOGGER.info(stringedRules.toString());
     }
 
     private void setAllDisable(boolean disable) {

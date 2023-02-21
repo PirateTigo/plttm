@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="authorContainer" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1">
+   <TextArea fx:id="mainText" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="272.0" prefWidth="572.0"
+             text="Сибирский Государственный Университет Телекоммуникаций и Информатики&#10;&#10;Факультет заочного обучения&#10;&#10;Курс: 5&#10;&#10;Группа: ЗП-81&#10;&#10;ФИО: Таракановский Артём"/>
+</AnchorPane>

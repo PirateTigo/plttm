@@ -12,6 +12,7 @@ import ru.sibsutis.piratetigo.plttm.chain.recognizer.RecognizeException;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import static ru.sibsutis.piratetigo.plttm.common.Tools.*;
 
@@ -125,13 +126,13 @@ public class Lab3Form {
     private HashSet<String> states = new HashSet<>();
 
     /** Вычисленный алфавит языка. */
-    private HashSet<Character> alphabet = new HashSet<>();
+    private Set<Character> alphabet = new HashSet<>();
 
     /** Вычисленное множество заключительных состояний. */
     private final HashSet<String> endStates = new HashSet<>();
 
     /** Вычисленный алфавит магазина ДМПА. */
-    private HashSet<Character> stackAlphabet = new HashSet<>();
+    private Set<Character> stackAlphabet = new HashSet<>();
 
     /** Группа радиокнопок - вариантов для правила функции переходов. */
     private ToggleGroup stackBehaviours;
@@ -142,10 +143,6 @@ public class Lab3Form {
     /** Проверяемая на принадлежность алфавиту языка цепочка символов. */
     private LinkedList<Character> chain = new LinkedList<>();
 
-    private static boolean isNullOrEmpty(String value) {
-        return value == null || value.isBlank();
-    }
-
     @FXML
     private void initialize() {
         // Обработчик пользовательского ввода множества состояний
@@ -155,7 +152,7 @@ public class Lab3Form {
                         userStates.setText(oldValue);
                     } else {
                         HashSet<String> excluded = new HashSet<>();
-                        states = calculateUniqueItems(
+                        states = (HashSet<String>) calculateUniqueItems(
                                 newValue.trim(),
                                 states,
                                 userStates,
@@ -179,7 +176,7 @@ public class Lab3Form {
                     if (newValue.trim().equals(oldValue)) {
                         userAlphabet.setText(oldValue);
                     } else {
-                        HashSet<Character> excluded = new HashSet<>();
+                        HashSet<String> excluded = new HashSet<>();
                         alphabet = calculateAlphabet(
                                 newValue.trim(),
                                 alphabet,
@@ -222,7 +219,7 @@ public class Lab3Form {
                     if (newValue.trim().equals(oldValue)) {
                         userStackAlphabet.setText(oldValue);
                     } else {
-                        HashSet<Character> excluded = new HashSet<>();
+                        HashSet<String> excluded = new HashSet<>();
                         stackAlphabet = calculateAlphabet(
                                 newValue.trim(),
                                 stackAlphabet,

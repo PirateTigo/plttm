@@ -17,7 +17,7 @@ import static ru.sibsutis.piratetigo.plttm.windows.MainWindow.*;
 @Log
 public class GUIStarter extends Application {
 
-    private static final String FAVICON_PATH = "/icons/compiler.png";
+    public static final String FAVICON_PATH = "/icons/compiler.png";
 
     /**
      * Точка входа в JavaFX приложение.

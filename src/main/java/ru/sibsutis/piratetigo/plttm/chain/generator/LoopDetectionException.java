@@ -4,13 +4,13 @@ package ru.sibsutis.piratetigo.plttm.chain.generator;
  * Выбрасывается при обнаружении зацикливания при генерации цепочек.
  */
 public class LoopDetectionException extends RuntimeException {
-    private final Character recursiveNonTerminal;
-    public LoopDetectionException(String msg, Character recursiveNonTerminal) {
+    private final String recursiveNonTerminal;
+    public LoopDetectionException(String msg, String recursiveNonTerminal) {
         super(msg);
         this.recursiveNonTerminal = recursiveNonTerminal;
     }
 
-    public Character getRecursiveNonTerminal() {
+    public String getRecursiveNonTerminal() {
         return recursiveNonTerminal;
     }
 

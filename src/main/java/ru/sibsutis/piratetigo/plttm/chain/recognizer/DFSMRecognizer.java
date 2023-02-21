@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import ru.sibsutis.piratetigo.plttm.common.Tools;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Детерминированный конечный автомат, распознающий цепочки языка.
@@ -17,10 +17,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DFSMRecognizer {
 
-    private final HashSet<String> states;
-    private final HashSet<Character> alphabet;
+    private final Set<String> states;
+    private final Set<Character> alphabet;
     private final String startState;
-    private final HashSet<String> endStates;
+    private final Set<String> endStates;
     private final Map<String, Map<Character, String>> transitions;
     private final LinkedList<Character> chain;
     private final ListView<String> process;

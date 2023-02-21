@@ -1,10 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.sibsutis.piratetigo.plttm.forms.CourseForm"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.sibsutis.piratetigo.plttm.forms.CourseForm">
+    <TabPane prefHeight="600.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="КС-грамматики">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="358.0" prefWidth="841.0">
+                <Label layoutX="14.0" layoutY="14.0" style="-fx-font-weight: bold;" text="КС-грамматика"/>
+                <Button fx:id="grammarFromFile" layoutX="209.0" layoutY="8.0" mnemonicParsing="false"
+                        text="Прочитать из файла"/>
+                <Button fx:id="grammarToFile" disable="true" layoutX="379.0" layoutY="8.0"
+                        mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Сохранить в файл"/>
+                <Label layoutX="14.0" layoutY="41.0" text="Терминальный алфавит:"/>
+                <TextArea fx:id="userTerminals" layoutX="165.0" layoutY="41.0" prefHeight="39.0"
+                          prefWidth="413.0"/>
+                <Label layoutX="14.0" layoutY="90.0" text="Нетерминальный алфавит:"/>
+                <TextArea fx:id="userNonTerminals" layoutX="165.0" layoutY="90.0" prefHeight="39.0"
+                          prefWidth="414.0"/>
+                <Label layoutX="14.0" layoutY="140.0" text="Целевой символ:"/>
+                <ComboBox fx:id="goalCharacter" layoutX="165.0" layoutY="136.0"/>
+                <ComboBox fx:id="generatingSymbol" layoutX="387.0" layoutY="169.0"/>
+                <Label layoutX="449.0" layoutY="168.0" text="→">
+                    <font>
+                        <Font size="18.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="rule" layoutX="474.0" layoutY="169.0" prefHeight="26.0" prefWidth="106.0"/>
+                <Button fx:id="lambda" layoutX="474.0" layoutY="205.0" mnemonicParsing="false" text="λ"/>
+                <Button fx:id="addRule" disable="true" layoutX="387.0" layoutY="205.0" mnemonicParsing="false"
+                        text="Добавить"/>
+                <Button fx:id="deleteRule" disable="true" layoutX="386.0" layoutY="238.0"
+                        mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Удалить"/>
+                <Label layoutX="14.0" layoutY="173.0" text="Правила вывода:"/>
+                <ListView fx:id="rules" layoutX="165.0" layoutY="173.0" prefHeight="89.0" prefWidth="200.0"/>
+                <Button fx:id="reset" layoutX="39.0" layoutY="224.0" mnemonicParsing="false" prefHeight="39.0"
+                        prefWidth="84.0" text="Сброс"/>
+                <Button fx:id="toCanonical" disable="true" layoutX="161.0" layoutY="286.0"
+                        mnemonicParsing="false" text="Перевести в канонический вид"/>
+                <Button fx:id="toChomsky" disable="true" layoutX="386.0" layoutY="286.0" mnemonicParsing="false"
+                        text="Построить грамматику Хомского"/>
+                <Label layoutX="614.0" layoutY="14.0" style="-fx-font-weight: bold;" text="БНФ-грамматика"/>
+                <Button fx:id="grammarChomskyToFile" disable="true" layoutX="809.0" layoutY="8.0"
+                        mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Сохранить в файл"/>
+                <Label layoutX="614.0" layoutY="41.0" text="Терминальный алфавит:"/>
+                <TextArea fx:id="userChomskyTerminals" editable="false" layoutX="765.0" layoutY="41.0"
+                          prefHeight="39.0" prefWidth="413.0"/>
+                <Label layoutX="614.0" layoutY="90.0" text="Нетерминальный алфавит:"/>
+                <TextArea fx:id="userChomskyNonTerminals" editable="false" layoutX="765.0" layoutY="90.0"
+                          prefHeight="39.0" prefWidth="414.0"/>
+                <Label layoutX="614.0" layoutY="140.0" text="Целевой символ:"/>
+                <ComboBox fx:id="chomskyGoalCharacter" disable="true" layoutX="765.0" layoutY="136.0"/>
+                <Label layoutX="614.0" layoutY="173.0" text="Правила вывода:"/>
+                <ListView fx:id="chomskyRules" layoutX="765.0" layoutY="173.0" prefHeight="89.0"
+                          prefWidth="200.0"/>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Генерация цепочек">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <Label layoutX="24.0" layoutY="32.0" text="Диапазон длин цепочек:"/>
+                <Spinner fx:id="chainSizeFrom" layoutX="175.0" layoutY="28.0" max="20" min="1" prefHeight="26.0"
+                         prefWidth="69.0"/>
+                <Spinner fx:id="chainSizeTo" layoutX="303.0" layoutY="28.0" max="20" min="1" prefHeight="26.0"
+                         prefWidth="70.0"/>
+                <Label layoutX="266.0" layoutY="14.0" prefHeight="27.0" prefWidth="19.0" text="-">
+                    <font>
+                        <Font size="36.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="412.0" layoutY="32.0" text="Тип вывода:"/>
+                <Button fx:id="inferenceType" layoutX="500.0" layoutY="28.0" mnemonicParsing="false"
+                        prefHeight="26.0" prefWidth="200.0" text="Левосторонний"/>
+                <Button fx:id="start" disable="true" layoutX="765.0" layoutY="27.0" mnemonicParsing="false"
+                        prefHeight="27.0" prefWidth="100.0" text="Запустить"/>
+                <Button fx:id="cancel" layoutX="899.0" layoutY="28.0" mnemonicParsing="false" prefHeight="27.0"
+                        prefWidth="100.0" text="Отменить"/>
+                <Label layoutX="24.0" layoutY="68.0" text="Вывод для КС-грамматики:"/>
+                <ListView fx:id="inference" layoutX="24.0" layoutY="91.0" prefHeight="258.0" prefWidth="372.0"/>
+                <Label fx:id="chainCount" layoutX="24.0" layoutY="358.0" text="Всего цепочек: 0"/>
+                <Label layoutX="806.0" layoutY="66.0" text="Вывод для БНФ-грамматики:"/>
+                <ListView fx:id="chomskyInference" layoutX="806.0" layoutY="89.0" prefHeight="258.0"
+                          prefWidth="372.0"/>
+                <Label fx:id="chomskyChainCount" layoutX="806.0" layoutY="356.0" text="Всего цепочек: 0"/>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
 </AnchorPane>

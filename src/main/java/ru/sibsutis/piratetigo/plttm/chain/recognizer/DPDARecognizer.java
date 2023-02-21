@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import ru.sibsutis.piratetigo.plttm.common.Tools;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DPDARecognizer {
 
-    private final HashSet<String> states;
-    private final HashSet<Character> alphabet;
+    private final Set<String> states;
+    private final Set<Character> alphabet;
     private final String startState;
-    private final HashSet<String> endStates;
-    private final HashSet<Character> stackAlphabet;
+    private final Set<String> endStates;
+    private final Set<Character> stackAlphabet;
     private final Character startStackSymbol;
-    private final HashSet<DPDARule> rules;
+    private final Set<DPDARule> rules;
     private final LinkedList<Character> chain;
     private final ListView<String> process;
 

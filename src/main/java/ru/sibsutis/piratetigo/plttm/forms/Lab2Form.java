@@ -76,7 +76,7 @@ public class Lab2Form {
     private HashSet<String> states = new HashSet<>();
 
     /** Вычисленный алфавит языка. */
-    private HashSet<Character> alphabet = new HashSet<>();
+    private Set<Character> alphabet = new HashSet<>();
 
     /** Вычисленное множество заключительных состояний. */
     private final HashSet<String> endStates = new HashSet<>();
@@ -93,7 +93,7 @@ public class Lab2Form {
                         userStates.setText(oldValue);
                     } else {
                         HashSet<String> excluded = new HashSet<>();
-                        states = calculateUniqueItems(
+                        states = (HashSet<String>) calculateUniqueItems(
                                 newValue.trim(),
                                 states,
                                 userStates,
@@ -117,7 +117,7 @@ public class Lab2Form {
                     if (newValue.trim().equals(oldValue)) {
                         userAlphabet.setText(oldValue);
                     } else {
-                        HashSet<Character> excluded = new HashSet<>();
+                        Set<String> excluded = new HashSet<>();
                         alphabet = calculateAlphabet(
                                 newValue.trim(),
                                 alphabet,
@@ -229,8 +229,8 @@ public class Lab2Form {
 
     @SuppressWarnings("rawtypes, unchecked")
     private List<TableColumn<Map, String>> generateColumns(
-            HashSet<String> srcStates,
-            HashSet<Character> srcAlphabet) {
+            Set<String> srcStates,
+            Set<Character> srcAlphabet) {
         // Создаем список столбцов таблицы
         List<TableColumn<Map, String>> table = new LinkedList<>();
 
@@ -279,8 +279,8 @@ public class Lab2Form {
     }
 
     ObservableList<Map<String, String>> generateTableData(
-            HashSet<String> srcStates,
-            HashSet<Character> srcAlphabet) {
+            Set<String> srcStates,
+            Set<Character> srcAlphabet) {
         ObservableList<Map<String, String>> allData =
                 FXCollections.observableArrayList();
         Map<String, String> dataRowTemplate = new HashMap<>();

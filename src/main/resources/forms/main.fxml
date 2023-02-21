@@ -6,9 +6,34 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
 
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
 <AnchorPane fx:id="root" xmlns:fx="http://javafx.com/fxml">
     <VBox fx:id="rootVBox" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="20.0">
+        <MenuBar fx:id="mainMenu" prefWidth="${root.width}"
+                 AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0">
+            <Menu text="Курсовая работа">
+                <Menu text="Данные">
+                    <MenuItem text="Чтение из файла..." onAction="#fromFileHandler" />
+                    <MenuItem text="Ввод с клавиатуры" onAction="#fromKeyboardHandler" />
+                </Menu>
+                <Menu text="Расчеты">
+                    <MenuItem text="Запустить" onAction="#calculateHandler" />
+                    <MenuItem text="Отменить" onAction="#cancelHandler" />
+                </Menu>
+                <Menu text="Запись результатов в файл">
+                    <MenuItem text="КС-грамматика..." onAction="#saveSrcGrammarToFileHandler" />
+                    <MenuItem text="БНФ-грамматика..." onAction="#saveChomskyGrammarToFileHandler" />
+                </Menu>
+                <MenuItem text="Справка" onAction="#helpHandler" />
+            </Menu>
+            <Menu text="Общее">
+                <MenuItem text="Тема" onAction="#themeHandler"/>
+                <MenuItem text="Автор" onAction="#authorHandler"/>
+            </Menu>
+        </MenuBar>
         <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE" tabMinWidth="180">
             <Tab fx:id="lab1" text="Лабораторная работа №1">
                 <fx:include source="lab1.fxml" />
@@ -19,14 +44,8 @@
             <Tab fx:id="lab3" text="Лабораторная работа №3">
                 <fx:include source="lab3.fxml" />
             </Tab>
-            <Tab fx:id="lab4" text="Лабораторная работа №4">
-
-            </Tab>
-            <Tab fx:id="lab5" text="Лабораторная работа №5">
-
-            </Tab>
             <Tab fx:id="course" text="Курсовая работа">
-
+                <fx:include source="course.fxml" />
             </Tab>
         </TabPane>
     </VBox>

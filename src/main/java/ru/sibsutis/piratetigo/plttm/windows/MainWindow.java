@@ -22,15 +22,15 @@ public class MainWindow {
     public final String MAIN_FORM_PATH = "/forms/main.fxml";
 
     private final double MAIN_WINDOW_WIDTH = 1200;
-    private final double MAIN_WINDOW_HEIGHT = 600;
+    private final double MAIN_WINDOW_HEIGHT = 620;
 
     /**
      * Наполняет контейнер компонентов окна.
      *
-     * @param stage            Контейнер компонентов окна.
-     * @param faviconLocation  URL размещения иконки приложения.
+     * @param stage Контейнер компонентов окна.
+     * @param faviconLocation URL размещения иконки приложения.
      * @param mainFormLocation URL размещения fxml-файла описания основной формы.
-     * @param controller       Контроллер для формы.
+     * @param controller Контроллер для формы.
      * @throws IOException Если fxml-файл описания формы недоступен.
      */
     public void prepareStage(
@@ -43,7 +43,9 @@ public class MainWindow {
         stage.setScene(new Scene(mainFormLoader.load(), MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT));
         stage.setTitle(MAIN_WINDOW_TITLE);
         stage.getIcons().add(new Image(faviconLocation.toExternalForm()));
-        ((MainForm) controller).setMainStage(stage);
+        MainForm mainForm = ((MainForm) controller);
+        mainForm.setMainStage(stage);
+        mainForm.setFaviconPath(faviconLocation);
     }
 
 }

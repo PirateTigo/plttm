@@ -19,6 +19,8 @@ repositories {
 
 dependencies {
     implementation("org.projectlombok:lombok:1.18.24")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+    implementation("com.google.guava:guava:31.1-jre")
     annotationProcessor("org.projectlombok:lombok:1.18.24")
 }
 
