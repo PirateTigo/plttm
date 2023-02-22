@@ -30,7 +30,7 @@ public class DPDARecognizer {
     private final ListView<String> process;
 
     private String currentState;
-    private LinkedList<Character> stack = new LinkedList<>();
+    private final LinkedList<Character> stack = new LinkedList<>();
 
     /**
      * Запускает процесс распознавания цепочки языка.
@@ -150,7 +150,7 @@ public class DPDARecognizer {
     private void processRule(DPDARule rule) throws RecognizeException {
         if (!rule.getChainSymbol().equals(Tools.LAMBDA)) {
             if (chain.isEmpty()) {
-                createError("ДМПА может использовать только λ-такты при пустой цепочке");
+                createError("ДМПА может использовать только при пустой цепочке");
             }
             chain.removeFirst();
         }
