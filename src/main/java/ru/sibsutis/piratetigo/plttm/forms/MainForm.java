@@ -36,7 +36,6 @@ public class MainForm {
     /**
      * Основное окно приложения.
      */
-    @SuppressWarnings("unused, FieldCanBeLocal")
     private Stage mainStage;
 
     /**

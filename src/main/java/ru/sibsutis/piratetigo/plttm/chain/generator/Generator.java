@@ -94,25 +94,18 @@ public class Generator {
         isRunning = true;
         chains.clear();
         String chain = "";
-        String nonTerminalGoal = fromLexeme(goal);
-        Set<String> mainRules = rules.get(nonTerminalGoal);
-        nonTerminalsUniquePath.push(nonTerminalGoal);
+        Set<String> mainRules = rules.get(goal);
+        nonTerminalsUniquePath.push(goal);
         try {
             if (direction == InferenceType.LEFT) {
                 for (String mainRule : mainRules) {
                     try {
                         add(generateChainLeft(mainRule, chain, ""));
-                    } catch (MissRuleException ex) {
+                    } catch (MissRuleException
+                             | ChainLengthExceededException
+                             | LoopDetectionException ex) {
                         LOGGER.info(ex.getMessage()
                                 + ". Переходим к следующему правилу");
-                    } catch (ChainLengthExceededException ex) {
-                        LOGGER.info(ex.getMessage()
-                                + ". Останавливаем обработку правила");
-                    } catch (LoopDetectionException ex) {
-                        LOGGER.info(ex.getMessage()
-                                + ". Продолжаем пропуск рекурсивной ветки. "
-                                + "Возврат к обработке нетерминала '"
-                                + nonTerminalGoal + "'");
                     }
                 }
             } else {
@@ -129,7 +122,7 @@ public class Generator {
                         LOGGER.info(ex.getMessage()
                                 + ". Продолжаем пропуск рекурсивной ветки. "
                                 + "Возврат к обработке нетерминала '"
-                                + nonTerminalGoal + "'");
+                                + goal + "'");
                     }
                 }
             }
@@ -171,12 +164,8 @@ public class Generator {
             String handledLexeme = ruleLexemes.get(0);
             String ruleRest =
                     lexemesToString(ruleLexemes, 1, ruleLexemes.size());
-            if (terminals.contains(fromLexeme(handledLexeme))) {
-                return generateChainLeft(
-                        ruleRest,
-                        chain + fromLexeme(handledLexeme),
-                        rest
-                );
+            if (terminals.contains(handledLexeme)) {
+                return generateChainLeft(ruleRest, chain + handledLexeme, rest);
             } else {
                 String handledNonTerminal = fromLexeme(handledLexeme);
                 nonTerminalsUniquePath.push(handledNonTerminal);
@@ -246,12 +235,8 @@ public class Generator {
             String handledLexeme = ruleLexemes.peekLast();
             String ruleRest =
                     lexemesToString(ruleLexemes, 0, ruleLexemes.size() - 1);
-            if (terminals.contains(fromLexeme(handledLexeme))) {
-                return generateChainRight(
-                        ruleRest,
-                        fromLexeme(handledLexeme) + chain,
-                        rest
-                );
+            if (terminals.contains(handledLexeme)) {
+                return generateChainRight(ruleRest, handledLexeme + chain, rest);
             } else {
                 String handledNonTerminal = fromLexeme(handledLexeme);
                 nonTerminalsUniquePath.push(handledNonTerminal);
