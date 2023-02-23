@@ -76,6 +76,38 @@ public class CourseForm {
     @FXML
     Button deleteRule;
 
+    /** Кнопка сброса всех полей. */
+    @FXML
+    Button reset;
+
+    /** Кнопка перевода КС-грамматики в канонический вид. */
+    @FXML
+    Button toCanonical;
+
+    /** Кнопка перевода КС-грамматики из канонического вида в форму Хомского. */
+    @FXML
+    Button toChomsky;
+
+    /** Кнопка сохранения БНФ-грамматики в файл. */
+    @FXML
+    Button grammarChomskyToFile;
+
+    /** Терминальные символы БНФ. */
+    @FXML
+    TextArea userChomskyTerminals;
+
+    /** Нетерминальные символы БНФ. */
+    @FXML
+    TextArea userChomskyNonTerminals;
+
+    /** Целевой символ БНФ. */
+    @FXML
+    ComboBox<String> chomskyGoalCharacter;
+
+    /** Множество правил вывода БНФ. */
+    @FXML
+    ListView<String> chomskyRules;
+
     /** Управляющий элемент левой границы диапазона длин генерируемых цепочек. */
     @FXML
     Spinner<Integer> chainSizeFrom;
@@ -112,38 +144,6 @@ public class CourseForm {
     @FXML
     Label chomskyChainCount;
 
-    /** Кнопка сброса всех полей. */
-    @FXML
-    Button reset;
-
-    /** Кнопка перевода КС-грамматики в канонический вид. */
-    @FXML
-    Button toCanonical;
-
-    /** Кнопка перевода КС-грамматики из канонического вида в форму Хомского. */
-    @FXML
-    Button toChomsky;
-
-    /** Кнопка сохранения БНФ-грамматики в файл. */
-    @FXML
-    Button grammarChomskyToFile;
-
-    /** Терминальные символы БНФ. */
-    @FXML
-    TextArea userChomskyTerminals;
-
-    /** Нетерминальные символы БНФ. */
-    @FXML
-    TextArea userChomskyNonTerminals;
-
-    /** Целевой символ БНФ. */
-    @FXML
-    ComboBox<String> chomskyGoalCharacter;
-
-    /** Множество правил вывода БНФ. */
-    @FXML
-    ListView<String> chomskyRules;
-
     /** Контекстно-свободная грамматика. */
     private ContextFreeGrammar contextFreeGrammar;
 
@@ -174,7 +174,7 @@ public class CourseForm {
     }
 
     /**
-     * Обработчик нажатия на кнопку "Чтение из файла...".
+     * Обработчик нажатия на кнопку "Прочитать из файла".
      */
     public void openFileHandler() {
         File file = fileChooser.showOpenDialog(
@@ -205,7 +205,7 @@ public class CourseForm {
     }
 
     /**
-     * Обработчик нажатия на кнопку "Сохранение КС-грамматики в файл...".
+     * Обработчик нажатия на кнопку "Сохранить в файл" в блоке "КС-грамматика".
      */
     public void saveSrcGrammarToFileHandler() {
         File file = fileChooser.showSaveDialog(
@@ -233,9 +233,9 @@ public class CourseForm {
     }
 
     /**
-     * Обработчик нажатия на кнопку "Сохранение БНФ-грамматики в файл...".
+     * Обработчик нажатия на кнопку "Сохранить в файл" в блоке "БНФ-грамматика".
      */
-    public void saveChomskyNormalFormGrammarToFileHandler() {
+    public void saveChomskyGrammarToFileHandler() {
         File file = fileChooser.showSaveDialog(
                 MainForm.getInstance().getMainStage()
         );
@@ -419,7 +419,7 @@ public class CourseForm {
 
         // Обработчик сохранения БНФ-грамматики в файл
         grammarChomskyToFile.setOnAction(event ->
-                saveChomskyNormalFormGrammarToFileHandler()
+                saveChomskyGrammarToFileHandler()
         );
 
         // Обработчик кнопки генерации БНФ-грамматики

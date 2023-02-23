@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Транспортный объект представления КС-грамматики,
+ * используемый для сериализации / десериалиации.
+ */
 @Data
 public class GrammarDTO {
     private String terminals;

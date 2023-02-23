@@ -148,7 +148,7 @@ public class MainForm {
     public void saveChomskyGrammarToFileHandler() {
         LOGGER.info("Нажата кнопка \"Сохранение БНФ-грамматики в файл...\"");
         if (!CourseForm.getInstance().grammarChomskyToFile.isDisabled()) {
-            CourseForm.getInstance().saveChomskyNormalFormGrammarToFileHandler();
+            CourseForm.getInstance().saveChomskyGrammarToFileHandler();
         }
     }
 
